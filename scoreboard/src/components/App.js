@@ -4,8 +4,6 @@ import Player from "./Player";
 
 const App = () => {
 
-  const [totalScore, setTotalScore] = React.useState(0)
-
   const [players, setPlayers] = React.useState([
     {
       name: "Guil",
@@ -35,24 +33,22 @@ const App = () => {
 
   const handleScoreChange = (id, delta) => {
     setPlayers(prevPlayers => prevPlayers.map(p => {
-      if (p.id === id) {
+      if (p.id === id && p.score + delta >= 0) {
         return {
           name: p.name,
           id: p.id,
-          score: p.score + delta < 0 ? 0 : p.score + delta
+          score: p.score + delta
         }
       }
       return p
     }));
-    setTotalScore(players.reduce((sum, player) => { return sum + player.score}, 1))
   }
 
   return (
     <div className="scoreboard">
       <Header
         title="Scoreboard"
-        totalPlayers={players.length}
-        totalScore={totalScore}
+        players={players}
       />
 
       {/* Players list */}
