@@ -1,24 +1,21 @@
 import React from "react";
+import PropTypes from 'prop-types';
 
-const Counter = (props) => {
-    // const [score, setScore] = React.useState(0);
 
-    // const incrementScore = () => {
-    //   setScore(prevScore => prevScore + 1);
-    // }
-
-    // const decrementScore = () => {
-    //   setScore(prevScore => prevScore - 1);
-    // }
-
+const Counter = ({score, id, changeScore}) => {
     return (
       <div className="counter">
-        <button className="counter-action decrement" onClick={() => props.changeScore(props.id, -1)}> - </button>
-        <span className="counter-score">{ props.score }</span>
-        <button className="counter-action increment" onClick={() => props.changeScore(props.id, 1)}> + </button>
+        <button className="counter-action decrement" onClick={() => changeScore(id, -1)}> - </button>
+        <span className="counter-score">{score}</span>
+        <button className="counter-action increment" onClick={() => changeScore(id, 1)}> + </button>
       </div>
     );
+}
 
+Counter.propTypes = {
+  id: PropTypes.number,
+  score: PropTypes.number,
+  changeScore: PropTypes.func,
 }
 
 export default Counter;

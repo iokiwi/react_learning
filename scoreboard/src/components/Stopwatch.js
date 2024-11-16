@@ -6,17 +6,14 @@ const StopWatch = () => {
     const [elapsedTime, setElapsedTime] = useState(0);
 
     useEffect(() => {
-        console.log("Running side effect")
         let id;
         if (isRunning) {
             id = setInterval(() => {
                 setElapsedTime(prevTime => prevTime + 1)
-                console.log("tick");
             }, 1000);
         }
         return () => {
             clearInterval(id);
-            console.log("cleanup")
         }
     }, [isRunning])
 

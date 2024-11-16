@@ -1,22 +1,21 @@
-import React, { useState } from 'react';
+import React, { useRef } from 'react';
 
 const AddPlayerForm = (props) => {
 
-    const [ value, setValue ] = useState("")
+    const playerInput = useRef()
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        props.addPlayer(value);
-        setValue("");
+        props.addPlayer(playerInput.current.value);
+        event.currentTarget.reset();
     }
 
     return (
         <form onSubmit={(event) => handleSubmit(event)}>
             <input
                 type="text"
-                value={value}
+                ref={playerInput}
                 placeholder="Enter a player's name"
-                onChange={(event) => setValue(event.target.value)}
             />
             <input type="submit" value="Create"/>
         </form>
