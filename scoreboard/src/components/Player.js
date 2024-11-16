@@ -1,21 +1,25 @@
 import React, { memo } from "react";
-import Counter from "./Counter";
 import PropTypes from 'prop-types';
 
-const Player = (props) => {
+import Counter from "./Counter";
+import Icon from './Icon';
+
+const Player = ({id, name, score, isHighScore, changeScore, removePlayer}) => {
 
   return (
     <div className="player">
-      {console.log(props.name + ' rendered')}
       <span className="player-name">
-        <button className="remove-player" onClick={() => props.removePlayer(props.id)}>✖</button>
-        {props.name}
+        <button className="remove-player" onClick={() => removePlayer(id)}>✖</button>
+        <Icon
+          isHighScore={isHighScore}
+        />
+        {name}
       </span>
 
       <Counter
-        score={props.score}
-        id={props.id}
-        changeScore={props.changeScore}
+        score={score}
+        id={id}
+        changeScore={changeScore}
       />
     </div>
   );
@@ -24,13 +28,14 @@ const Player = (props) => {
 Player.propTypes = {
   name: PropTypes.string.isRequired,
   score: PropTypes.number.isRequired,
-  id: PropTypes.number,
-  removePlayer: PropTypes.func,
-  changeScore: PropTypes.func
+  id: PropTypes.number.isRequired,
+  removePlayer: PropTypes.func.isRequired,
+  changeScore: PropTypes.func.isRequired,
+  isHighScore: PropTypes.bool.isRequired,
 }
 
 const playerPropsAreEqual = (prevProps, nextProps) => {
-  return prevProps.score === nextProps.score
+  return prevProps.score === nextProps.score && prevProps.isHighScore === nextProps.isHighScore;
 }
 
 export default memo(Player, playerPropsAreEqual);
