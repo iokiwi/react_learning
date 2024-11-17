@@ -25,10 +25,10 @@ const UserSignIn = () => {
 
     try {
       const user = await actions.signIn(credentials);
-      if (user === null) {
-        setErrors("Username or password were incorrect")
-      } else {
+      if (user) {
         navigate("/authenticated")
+      } else {
+        setErrors(["Username or password were incorrect"])
       }
     } catch (e) {
       console.log(e)

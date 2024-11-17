@@ -1,4 +1,4 @@
-import { act, createContext, useState } from "react";
+import { createContext, useState } from "react";
 
 const UserContext = createContext(null);
 
@@ -38,7 +38,7 @@ export const UserProvider = (props) => {
   return (
     <UserContext.Provider value={{
       authUser,
-      acttions: {
+      actions: {
         signIn
       }
     }}>
