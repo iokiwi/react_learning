@@ -1,9 +1,10 @@
 import { useContext, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import ThemeContext from '../context/ThemeContext';
 
 const UserSignIn = () => {
   const { accentColor } = useContext(ThemeContext);
+  const navigate = useNavigate();
 
   // State
   const name = useRef(null);
@@ -12,12 +13,46 @@ const UserSignIn = () => {
   const [errors, setErrors] = useState([]);
 
   // event handlers
-  const handleSubmit = (event) => {
+  const handleSubmit =  async (event) => {
     event.preventDefault();
+
+    const user = {
+      name: name.current.value,
+      username: username.current.value,
+      password: password.current.value,
+    }
+
+    const fetchOptions = {
+      method: "POST",
+      body: JSON.stringify(user),
+      headers: {
+        "Content-Type": "application/json; charset=utf-8"
+      }
+    }
+
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/users", fetchOptions
+      );
+  
+      if (response.status === 201) {
+        console.log(`${user.username} is successfully signed up and authenticated!`)
+      } else if (response.status === 400) {
+        const data = await response.json()
+        setErrors(data.errors)
+      } else {
+        throw new Error("Something went wrong!");
+      }
+    } catch (error) {
+      console.log(error);
+      navigate("/error");
+    }
+
   }
 
   const handleCancel = (event) => {
     event.preventDefault();
+    navigate("/");
   }
 
   return (
