@@ -1,10 +1,12 @@
 import { useContext, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import ThemeContext from '../context/ThemeContext';
+import UserContext from '../context/UserContext';
 
 const UserSignIn = () => {
-  const { accentColor } = useContext(ThemeContext);
 
+  const { accentColor } = useContext(ThemeContext);
+  const { actions } = useContext(UserContext);
   const navigate = useNavigate();
 
   // State
@@ -16,34 +18,17 @@ const UserSignIn = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // const credentials = {
-    //   username: username.current.value,
-    //   password: password.current.value,
-    // }
-
-    const encodedCredentials = btoa(`${username.current.value}:${password.current.value}`)
-
-    const fetchOptions = {
-      method: "GET",
-      headers: {
-        "Authorization": `Basic ${encodedCredentials}`
-      },
+    const credentials = {
+      username: username.current.value,
+      password: password.current.value,
     }
 
-
-
     try {
-      const response = await fetch(
-        "http://localhost:5000/api/users", fetchOptions
-      )
-      if (response.status === 200) {
-        const user = await response.json();
-        console.log(`Success! ${user.username} is now signed in!`);
-        navigate("/authenticated");
-      } else if (response.status === 401) {
-        setErrors(["Username or password were incorrect"])
+      const user = await actions.signIn(credentials);
+      if (user === null) {
+        setErrors("Username or password were incorrect")
       } else {
-        throw new Error();
+        navigate("/authenticated")
       }
     } catch (e) {
       console.log(e)
